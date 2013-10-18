@@ -100,7 +100,7 @@ function getElement(layer, prefix) {
 function spriteCSS(layer, rootSelector) {
   
   var output = "";
-  output += "." + rootSelector + " ";
+  output += "." + rootSelector + "";
   output += "." + layer.selector + " {\n";
   output += "\twidth:  " + layer.width + "px;\n";
   output += "\theight: " + layer.height + "px;\n";
