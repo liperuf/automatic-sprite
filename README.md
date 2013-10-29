@@ -16,3 +16,10 @@ Do you have a PSD Sprite? Have a try. I'll post examples soon.
 * css as template
 * export image options
 * import script (modularize)
+
+# references:
+* https://github.com/sjpsega/PSD2CssSprite/blob/master/PSD2CssSprite/PSD2CssSprite.jsx
+* https://github.com/euskadi31/Photoshop-CSS-Sprite/blob/master/PSprite.jsx
+* https://github.com/vvasilev-/sprites/blob/master/Sprites.jsx
+* https://github.com/infinityspiral/Photoshop_CSS-Spritesheet/blob/master/CSS-Sprites.jsx
+* https://raw.github.com/raptros/PSSpriteSheet/master/PSSpriteSheet.jsx

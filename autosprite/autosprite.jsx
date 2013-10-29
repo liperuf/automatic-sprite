@@ -1,19 +1,3 @@
-#target photoshop
-app.bringToFront();
-
-var exportOpts = {
-  name: "sprites",
-  img: {
-    outputformat: "PNG",
-    // path: ""
-  },
-  css: {
-    outputformat: "CSS",
-    // path: ""
-  }
-  
-};
-
 var AutoSprite = function(opts, SpritePSD) {
 
   var AutoSprite = {};
@@ -181,8 +165,3 @@ var AutoSprite = function(opts, SpritePSD) {
 
   return AutoSprite;
 };
-
-var exportSprite = new AutoSprite(exportOpts, app.activeDocument);
-
-exportSprite.exportCSS();
-exportSprite.exportImage();
