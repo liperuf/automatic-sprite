@@ -1,17 +1,17 @@
-var AutoSprite = function(opts, SpritePSD) {
+var AutoSprite = function(settings, SpritePSD) {
 
   var AutoSprite = {};
   var SpritePSD = SpritePSD || app.activeDocument;
   var exportData = {
     
     "css": {
-      name: opts.css && opts.css.name || opts.name || SpritePSD.name,
-      path: opts.css && opts.css.path || SpritePSD.path
+      name: settings.css && settings.css.name || settings.name || SpritePSD.name,
+      path: settings.css && settings.css.path || settings.path || SpritePSD.path
     },
     
     "img": {
-      name: opts.css && opts.css.name || opts.name || SpritePSD.name,
-      path: opts.img && opts.img.path || SpritePSD.path
+      name: settings.css && settings.css.name || settings.name || SpritePSD.name,
+      path: settings.img && settings.img.path || settings.path || SpritePSD.path
     }
   };
 
@@ -115,13 +115,14 @@ var AutoSprite = function(opts, SpritePSD) {
       output += spriteCSS(content[i], exportData.name);
     }
 
-    var outputFile = new File( getFullPath(exportData.path, exportData.name, "css") );
+    var outputFilePath = getFullPath(exportData.path, exportData.name, "css");
+    var outputFile = new File( outputFilePath );
     outputFile.open("w");
     outputFile.writeln(output);
     outputFile.close();
 
     if(typeof callback === "function") {
-      callback("success", exportData.path);
+      callback("success", outputFilePath);
     }
     
     return;
@@ -140,7 +141,8 @@ var AutoSprite = function(opts, SpritePSD) {
   // Builds a file based on exportData information.
   function writePNG(document, exportData, callback) {
     
-    var outputFile = new File( getFullPath(exportData.path, exportData.name, "png") );
+    var outputFilePath = getFullPath(exportData.path, exportData.name, "png")
+    var outputFile = new File( outputFilePath );
     var options = new ExportOptionsSaveForWeb();
     options.format = SaveDocumentType.PNG;
     options.PNG8 = false;
@@ -148,7 +150,7 @@ var AutoSprite = function(opts, SpritePSD) {
     document.exportDocument(outputFile, ExportType.SAVEFORWEB, options);
 
     if(typeof callback === "function") {
-      callback("success", exportData.path);
+      callback("success", outputFilePath);
     } 
   }
 

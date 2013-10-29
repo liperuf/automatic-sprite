@@ -6,13 +6,15 @@ $.evalFile($.includePath + "/autosprite/autosprite.jsx");
 
 var exportOpts = {
   name: "sprites",
+  path: $.includePath + "/demo",
+  
   img: {
-    outputformat: "PNG",
-    path: $.includePath + "/demo"
+    outputFormat: "PNG",
+    // path: $.includePath + "/demo"
   },
   css: {
-    outputformat: "CSS",
-    path: $.includePath + "/demo"
+    outputFormat: "CSS",
+    // path: $.includePath + "/demo"
   }
   
 };
