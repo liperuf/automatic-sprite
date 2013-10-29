@@ -16,6 +16,10 @@ Do you have a PSD Sprite? Have a try. I'll post examples soon.
 * css as template
 * export image options
 * import script (modularize)
+* normalize layer's name
+* check for duplicated layer's name
+* accept templating on every CSS string
+* change background-image extension on rootCSS
 
 # references:
 * https://github.com/sjpsega/PSD2CssSprite/blob/master/PSD2CssSprite/PSD2CssSprite.jsx

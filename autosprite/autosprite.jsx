@@ -1,6 +1,5 @@
 var AutoSprite = function(settings, SpritePSD) {
 
-  var AutoSprite = {};
   var SpritePSD = SpritePSD || app.activeDocument;
   var exportData = {
     "css": {
@@ -19,8 +18,10 @@ var AutoSprite = function(settings, SpritePSD) {
     return path + "/" + file + "." + ext;
   }
 
-  // Gets a set (group) of layers and returns an array of
-  // elements.
+  /* 
+   * Gets a group of layers (based on "root" param).
+   * Returns an array of elements for CSS spriting.
+   */
   function getLayerGroup(root, prefix) {
     
     var set = [], element;
@@ -37,7 +38,22 @@ var AutoSprite = function(settings, SpritePSD) {
     return set;
   }
 
-  // Gets a layer (element) and returns it's important data.
+  /* 
+   * Gets a single layer.
+   * Returns it's important data for CSS sprite:
+   *
+   * - name: layer name
+   * - selector: full layer's path name
+   * - top: absolute top position from PSD
+   * - left: absolute left position from PSD
+   * - width: layer's width
+   * - height: layer's height
+   * 
+   * [todo]
+   * - force normalize on layer's name
+   * - check for duplicated layer's name
+   * 
+   */
   function getLayer(layer, prefix) {
     
     if(!layer.visible) { 
@@ -77,22 +93,35 @@ var AutoSprite = function(settings, SpritePSD) {
   }
 
 
-  // return a CSS string based on given layer.
-  function spriteCSS(layer, rootSelector) {
+  /*
+   * Returns a CSS string based on given element (layer data).
+   * 
+   * [todo]
+   * - accept templating
+   * 
+   */
+  function spriteCSS(element, rootSelector) {
     
     var output = "";
     output += "." + rootSelector + "";
-    output += "." + layer.selector + " {\n";
-    output += "\twidth:  " + layer.width + "px;\n";
-    output += "\theight: " + layer.height + "px;\n";
-    output += "\tbackground-position: -" + layer.left + "px -" + layer.top + "px;\n";
+    output += "." + element.selector + " {\n";
+    output += "\twidth:  " + element.width + "px;\n";
+    output += "\theight: " + element.height + "px;\n";
+    output += "\tbackground-position: -" + element.left + "px -" + element.top + "px;\n";
     output += "}\n";
 
     return output + "\n";
   }
 
 
-  // return CSS initial settings.
+  /*
+   * Returns root CSS selector string.
+   * 
+   * [todo]
+   * - accept templating
+   * - change background-image extension
+   * 
+   */
   function rootCSS(rootSelector) {
    
     var output = "";
@@ -106,7 +135,9 @@ var AutoSprite = function(settings, SpritePSD) {
   }
 
 
-  // Iterates over content and builds a file.
+  /*
+   * Iterates over content and builds a file.
+   */
   function writeCSS(content, exportData, callback) {
     
     var output = rootCSS(exportData.name);
@@ -127,7 +158,10 @@ var AutoSprite = function(settings, SpritePSD) {
     
     return;
   }
-
+  
+  /*
+   * Exports CSS
+   */
   function exportCSS() {
     writeCSS(getLayerGroup(SpritePSD), exportData["css"], function(status, data) {
       if(status === "success") {
@@ -136,9 +170,9 @@ var AutoSprite = function(settings, SpritePSD) {
     });
   }
 
-  AutoSprite.exportCSS = exportCSS;
-
-  // Builds a file based on exportData information.
+  /*
+   * Builds a file based on exportData information.
+   */
   function writePNG(document, exportData, callback) {
     
     var outputFilePath = getFullPath(exportData.path, exportData.name, "png")
@@ -154,6 +188,9 @@ var AutoSprite = function(settings, SpritePSD) {
     } 
   }
 
+  /*
+   * Exports PNG
+   */
   function exportPNG() {
     writePNG(SpritePSD, exportData["img"], function(status, data) {
       if(status === "success") {
@@ -162,10 +199,16 @@ var AutoSprite = function(settings, SpritePSD) {
     });
   }
   
+  /*
+   * Exports JPG
+   */
   function exportJPG() {
     alert("JPG Export not implemented");
   }
 
+  /*
+   * Exports Image
+   */
   function exportImage(imageFormat) {
     
     var imageFormat = imageFormat && imageFormat.toLowerCase() || exportData.img.outputFormat;
@@ -182,7 +225,8 @@ var AutoSprite = function(settings, SpritePSD) {
     }
   }
 
-  AutoSprite.exportImage = exportImage;
-
-  return AutoSprite;
+  return {
+    exportCSS: exportCSS,
+    exportImage: exportImage
+  };
 };

@@ -19,5 +19,5 @@ var settings = {
 
 var exportSprite = new AutoSprite(settings, app.activeDocument);
 
-// exportSprite.exportCSS();
-exportSprite.exportImage("PNG");
+exportSprite.exportCSS();
+exportSprite.exportImage();
