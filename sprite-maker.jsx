@@ -22,15 +22,15 @@
   exportFile.CSSPath = (function (file) { return file.path + "/" + file.name + ".css"; })(exportFile);
   exportFile.PNGPath = (function (file) { return file.path + "/" + file.name + ".png"; })(exportFile);
 
-  writeCSS(getSet(PSD.document), exportFile, function(status, data) {
+  writeCSS(getLayerGroup(PSD.document), exportFile, function(status, data) {
     if(status === "success") {
-      alert("Good Job! \n CSS Created. \n File \"" + data + "\" successfully written.");
+      alert("CSS Created \n File \"" + data + "\" successfully written.");
     }
   });
   
   writePNG(PSD.document, exportFile, function(status, data) {
     if(status === "success") {
-      alert("Good Job! \n PNG Exported. \n File \"" + data + "\" successfully written.");
+      alert("PNG Exported \n File \"" + data + "\" successfully written.");
     }
   });
 
@@ -39,13 +39,13 @@
 
 // Gets a set (group) of layers and returns an array of
 // elements.
-function getSet(root, prefix) {
+function getLayerGroup(root, prefix) {
   
   var set = [], element;
 
   for(var i = 0; i < root.layers.length; i++) {
     
-    element = getElement(root.layers[i], prefix);
+    element = getLayer(root.layers[i], prefix);
     
     if(element) { 
       set = set.concat( element );
@@ -57,7 +57,7 @@ function getSet(root, prefix) {
 
 
 // Gets a layer (element) and returns it's important data.
-function getElement(layer, prefix) {
+function getLayer(layer, prefix) {
   
   if(!layer.visible) { 
     return false;
@@ -68,10 +68,10 @@ function getElement(layer, prefix) {
   if(layer.typename === 'LayerSet') {
     
     if(typeof prefix === 'undefined') {
-      return getSet(layer, layer.name.toLowerCase());
+      return getLayerGroup(layer, layer.name.toLowerCase());
     }
     else {
-      return getSet(layer, prefix + "-" + layer.name.toLowerCase());
+      return getLayerGroup(layer, prefix + "-" + layer.name.toLowerCase());
     }
 
   }

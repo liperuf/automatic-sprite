@@ -1,11 +1,12 @@
 #target photoshop
+app.bringToFront();
 
 var exportOpts = {
   name: "sprites",
   img: {
     outputformat: "PNG",
     // path: ""
-  }
+  },
   css: {
     outputformat: "CSS",
     // path: ""
@@ -13,30 +14,25 @@ var exportOpts = {
   
 };
 
-var exportSprite = new AutoSprite(exportOpts, app.activeDocument);
-
-exportSprite.exportCSS();
-exportSprite.exportImage();
-
-
 var AutoSprite = function(opts, SpritePSD) {
 
   var AutoSprite = {};
   var SpritePSD = SpritePSD || app.activeDocument;
   var exportData = {
+    
     "css": {
       name: opts.css && opts.css.name || opts.name || SpritePSD.name,
       path: opts.css && opts.css.path || SpritePSD.path
-    }
+    },
+    
     "img": {
       name: opts.css && opts.css.name || opts.name || SpritePSD.name,
       path: opts.img && opts.img.path || SpritePSD.path
     }
   };
-  
 
   function getFullPath(path, file, ext) {
-    return path + "/" + name + "." + ext;
+    return path + "/" + file + "." + ext;
   }
 
   // Gets a set (group) of layers and returns an array of
@@ -56,7 +52,6 @@ var AutoSprite = function(opts, SpritePSD) {
 
     return set;
   }
-
 
   // Gets a layer (element) and returns it's important data.
   function getLayer(layer, prefix) {
@@ -156,10 +151,11 @@ var AutoSprite = function(opts, SpritePSD) {
     });
   }
 
-  AutoSprite.exportCSS = writeCSS;
+  AutoSprite.exportCSS = exportCSS;
 
   // Builds a file based on exportData information.
   function writePNG(document, exportData, callback) {
+    
     var outputFile = new File( getFullPath(exportData.path, exportData.name, "png") );
     var options = new ExportOptionsSaveForWeb();
     options.format = SaveDocumentType.PNG;
@@ -173,7 +169,7 @@ var AutoSprite = function(opts, SpritePSD) {
   }
 
   function exportPNG() {
-    writePNG(SpritePSD, exportData["png"], function(status, data) {
+    writePNG(SpritePSD, exportData["img"], function(status, data) {
       if(status === "success") {
         alert("PNG Exported \n File \"" + data + "\" successfully written.");
       }
@@ -181,7 +177,12 @@ var AutoSprite = function(opts, SpritePSD) {
   }
 
 
-  AutoSprite.exportImage = writePNG;
+  AutoSprite.exportImage = exportPNG;
 
   return AutoSprite;
 };
+
+var exportSprite = new AutoSprite(exportOpts, app.activeDocument);
+
+exportSprite.exportCSS();
+exportSprite.exportImage();

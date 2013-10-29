@@ -13,3 +13,6 @@ Do you have a PSD Sprite? Have a try. I'll post examples soon.
 * pseudo-classes (:hover, :active, :etc)
 * configuration file
 * serve as grunt plugin
+* css as template
+* export image options
+* import script (modularize)
