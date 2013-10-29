@@ -3,7 +3,6 @@ var AutoSprite = function(settings, SpritePSD) {
   var AutoSprite = {};
   var SpritePSD = SpritePSD || app.activeDocument;
   var exportData = {
-    
     "css": {
       name: settings.css && settings.css.name || settings.name || SpritePSD.name,
       path: settings.css && settings.css.path || settings.path || SpritePSD.path
@@ -11,7 +10,8 @@ var AutoSprite = function(settings, SpritePSD) {
     
     "img": {
       name: settings.css && settings.css.name || settings.name || SpritePSD.name,
-      path: settings.img && settings.img.path || settings.path || SpritePSD.path
+      path: settings.img && settings.img.path || settings.path || SpritePSD.path,
+      outputFormat: settings.img && settings.img.outputFormat.toLowerCase() || "png"
     }
   };
 
@@ -161,9 +161,28 @@ var AutoSprite = function(settings, SpritePSD) {
       }
     });
   }
+  
+  function exportJPG() {
+    alert("JPG Export not implemented");
+  }
 
+  function exportImage(imageFormat) {
+    
+    var imageFormat = imageFormat && imageFormat.toLowerCase() || exportData.img.outputFormat;
+    
+    var processOutput = {
+      "png": exportPNG,
+      "jpg": exportJPG
+    };
+    
+    if(imageFormat in processOutput) {
+      return processOutput[imageFormat]();
+    } else {
+      alert("Invalid image output format!");
+    }
+  }
 
-  AutoSprite.exportImage = exportPNG;
+  AutoSprite.exportImage = exportImage;
 
   return AutoSprite;
 };
