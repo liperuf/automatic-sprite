@@ -6,10 +6,12 @@ As a frontend developer, I like to maintain sprites my way. Automatic Sprite is 
 Do you have a PSD Sprite? Have a try. I'll post examples soon.
 
 # to do
+* UI
+* UI!!!!
+* UI... so you don't need to configure run.jsx every f* time.
 * step-by-step
 * examples
 * tests
-* UI
 * pseudo-classes (:hover, :active, :etc)
 * configuration file
 * serve as grunt plugin
