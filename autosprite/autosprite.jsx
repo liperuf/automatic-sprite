@@ -1,6 +1,7 @@
 var AutoSprite = function(settings, SpritePSD) {
 
   var SpritePSD = SpritePSD || app.activeDocument;
+  
   var exportData = {
     "css": {
       name: settings.css && settings.css.name || settings.name || SpritePSD.name,
@@ -59,37 +60,22 @@ var AutoSprite = function(settings, SpritePSD) {
     if(!layer.visible) { 
       return false;
     }
-
-    var pathname = '', name;
+    
+    var name = layer.name.toLowerCase();
+    var pathname = (typeof prefix === 'undefined'? '' : prefix + '-') + name; 
 
     if(layer.typename === 'LayerSet') {
-      
-      if(typeof prefix === 'undefined') {
-        return getLayerGroup(layer, layer.name.toLowerCase());
-      }
-      else {
-        return getLayerGroup(layer, prefix + "-" + layer.name.toLowerCase());
-      }
-
+      return getLayerGroup(layer, pathname);
     }
-    else {
 
-      if(typeof prefix !== "undefined") {
-        pathname +=  prefix + '-';
-      }
-      
-      name = layer.name.toLowerCase();
-      pathname += name;
-
-      return [{
-        name: name,
-        selector: pathname,
-        top: layer.bounds[1].value,
-        left: layer.bounds[0].value,
-        width: layer.bounds[2].value - layer.bounds[0].value,
-        height: layer.bounds[3].value - layer.bounds[1].value
-      }];
-    }
+    return [{
+      name: name,
+      selector: pathname,
+      top: layer.bounds[1].value,
+      left: layer.bounds[0].value,
+      width: layer.bounds[2].value - layer.bounds[0].value,
+      height: layer.bounds[3].value - layer.bounds[1].value
+    }];
   }
 
 
@@ -102,15 +88,33 @@ var AutoSprite = function(settings, SpritePSD) {
    */
   function spriteCSS(element, rootSelector) {
     
-    var output = "";
-    output += "." + rootSelector + "";
-    output += "." + element.selector + " {\n";
-    output += "\twidth:  " + element.width + "px;\n";
-    output += "\theight: " + element.height + "px;\n";
-    output += "\tbackground-position: -" + element.left + "px -" + element.top + "px;\n";
-    output += "}\n";
+    var spriteData = {
+      root:     rootSelector,
+      selector: element.selector,
+      width:    element.width,
+      height:   element.height,
+      top:      element.top,
+      left:     element.left
+    };
+    
+    var tmpl =  '.{{root}}.{{selector}} {'+
+                '  width:  {{width}}px;'+
+                '  height: {{height}}px;'+
+                '  background-position: -{{left}}px -{{top}}px;'+
+                '}\n';
 
-    return output + "\n";
+    return roughTemplate(tmpl, spriteData);
+  }
+
+  /*
+   * Rough templating utility. Returns a populated string.
+   * 
+   */
+  function roughTemplate(template, data) {
+    for(key in data) {
+      template = template.replace(new RegExp('{{'+ key +'}}', 'g'), data[key]);
+    }
+    return template;
   }
 
 
@@ -123,15 +127,14 @@ var AutoSprite = function(settings, SpritePSD) {
    * 
    */
   function rootCSS(rootSelector) {
-   
-    var output = "";
-    output += "." + rootSelector + " {\n";
-    output += "\tbackground-image:  url(" + rootSelector + ".png);\n";
-    output += "\tbackground-repeat: no-repeat;\n";
-    output += "\tdisplay: block;\n";
-    output += "}\n";
+    
+    var tmpl =  '.{{root}} {\n'+
+                '\tbackground-image:  url({{root}}.png);\n'+
+                '\tbackground-repeat: no-repeat;\n'+
+                '\tdisplay: block;\n'+
+                '}\n';
 
-    return output + "\n";
+    return roughTemplate(tmpl, { root: rootSelector });
   }
 
 
